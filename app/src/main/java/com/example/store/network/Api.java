@@ -7,6 +7,7 @@ import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
+import retrofit2.http.Query;
 
 public interface Api {
 
@@ -20,5 +21,5 @@ public interface Api {
             "ck_9c71c8861720068e73b5a5262a309f2703e0ce9e" +
             "&consumer_secret=" +
             "cs_40c14b983a9aaf064710624122478c74fcfbf06f")
-    Call<List<Category>> getCategories();
+    Call<List<Category>> getCategories(@Query("parent") long parent);
 }

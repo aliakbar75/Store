@@ -25,48 +25,60 @@
             app:layout_constraintTop_toTopOf="parent"
             app:titleTextColor="@android:color/white"/>
 
-        <TextView
-            android:id="@+id/newest_products_title"
-            android:text="@string/newest_products"
+        <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@+id/toolbar"/>
+            android:layout_height="0dp"
+            app:layout_constraintTop_toBottomOf="@id/toolbar"
+            app:layout_constraintBottom_toBottomOf="parent">
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/newest_products_recycler_view"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@+id/newest_products_title"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
 
+                <TextView
+                    android:id="@+id/newest_products_title"
+                    android:text="@string/newest_products"
+                    android:textSize="25sp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
 
-
-        <TextView
-            android:id="@+id/top_selling_products_title"
-            android:text="@string/top_selling_products"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@+id/newest_products_recycler_view"/>
-
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/top_selling_products_recycler_view"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@+id/top_selling_products_title"/>
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/newest_products_recycler_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp" />
 
 
 
-        <TextView
-            android:id="@+id/best_products_title"
-            android:text="@string/best_products"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@+id/top_selling_products_recycler_view"/>
+                <TextView
+                    android:id="@+id/top_selling_products_title"
+                    android:text="@string/top_selling_products"
+                    android:textSize="25sp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/best_products_recycler_view"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@+id/best_products_title"/>
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/top_selling_products_recycler_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp" />
+
+
+
+                <TextView
+                    android:id="@+id/best_products_title"
+                    android:text="@string/best_products"
+                    android:textSize="25sp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/best_products_recycler_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp" />
+            </LinearLayout>
+
+
+        </ScrollView>
 
 
     </android.support.constraint.ConstraintLayout>

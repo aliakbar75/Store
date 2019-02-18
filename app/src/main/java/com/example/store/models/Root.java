@@ -5,6 +5,7 @@ import com.google.gson.annotations.SerializedName;
 import java.util.List;
 
 public class Root {
+
     @SerializedName("products")
     private List<Product> mProducts;
 
