@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Store</string>
     <string name="categories">لیست دسته بندی محصولات</string>
-    <string name="newest_products">جدیدترین ها</string>
-    <string name="top_selling_products">پرفروش ترین ها</string>
-    <string name="best_products">بهترین ها</string>
+    <string name="newest_products">جدیدترین محصولات</string>
+    <string name="top_selling_products">پرفروش ترین محصولات</string>
+    <string name="best_products">بهترین محصولات</string>
 </resources>

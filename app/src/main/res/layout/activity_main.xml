@@ -23,9 +23,51 @@
             android:background="?attr/colorPrimary"
             android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
             app:layout_constraintTop_toTopOf="parent"
-            app:titleTextColor="@android:color/white">
+            app:titleTextColor="@android:color/white"/>
 
-        </android.support.v7.widget.Toolbar>
+        <TextView
+            android:id="@+id/newest_products_title"
+            android:text="@string/newest_products"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@+id/toolbar"/>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/newest_products_recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@+id/newest_products_title"/>
+
+
+
+        <TextView
+            android:id="@+id/top_selling_products_title"
+            android:text="@string/top_selling_products"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@+id/newest_products_recycler_view"/>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/top_selling_products_recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@+id/top_selling_products_title"/>
+
+
+
+        <TextView
+            android:id="@+id/best_products_title"
+            android:text="@string/best_products"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@+id/top_selling_products_recycler_view"/>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/best_products_recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@+id/best_products_title"/>
+
 
     </android.support.constraint.ConstraintLayout>
 
