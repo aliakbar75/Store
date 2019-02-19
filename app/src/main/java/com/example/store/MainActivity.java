@@ -1,7 +1,6 @@
 package com.example.store;
 
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -25,7 +24,6 @@ import com.example.store.network.Api;
 import com.example.store.network.RetrofitInstance;
 import com.squareup.picasso.Picasso;
 
-import java.io.IOException;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -33,7 +31,6 @@ import java.util.List;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.Retrofit;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -82,6 +79,15 @@ public class MainActivity extends AppCompatActivity {
                     });
                     mProductAdapter  = new ProductAdapter(products);
                     mNewestRecyclerView.setAdapter(mProductAdapter);
+                    mNewestRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+                        @Override
+                        public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                            super.onScrolled(recyclerView, dx, dy);
+                            if (!mNewestRecyclerView.canScrollHorizontally(1)) {
+
+                            }
+                        }
+                    });
 
 
                     Collections.sort(products, new Comparator<Product>(){
@@ -218,7 +224,7 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public ProductHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
             LayoutInflater inflater = LayoutInflater.from(MainActivity.this);
-            View view = inflater.inflate(R.layout.list_item_product, parent, false);
+            View view = inflater.inflate(R.layout.list_item_product_horizontal, parent, false);
             ProductHolder productHolder = new ProductHolder(view);
             return productHolder;
         }
