@@ -99,7 +99,7 @@ public class CategoriesListFragment extends Fragment {
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = ProductsListActivity.newIntent(getActivity(),mCategory.getId());
+                    Intent intent = ProductsListActivity.newIntent(getActivity(),mCategory.getId(),0);
                     startActivity(intent);
                 }
             });

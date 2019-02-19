@@ -24,6 +24,7 @@ import com.example.store.network.Api;
 import com.example.store.network.RetrofitInstance;
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -40,6 +41,9 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerView mNewestRecyclerView;
     private RecyclerView mTopSellingRecyclerView;
     private RecyclerView mBestRecyclerView;
+    private TextView mNewestTextView;
+    private TextView mTopSellingTextView;
+    private TextView mBestTextView;
     private ProductAdapter mProductAdapter;
 
     @Override
@@ -53,6 +57,9 @@ public class MainActivity extends AppCompatActivity {
         mNewestRecyclerView = findViewById(R.id.newest_products_recycler_view);
         mTopSellingRecyclerView = findViewById(R.id.top_selling_products_recycler_view);
         mBestRecyclerView = findViewById(R.id.best_products_recycler_view);
+        mNewestTextView = findViewById(R.id.newest_products_title);
+        mTopSellingTextView = findViewById(R.id.top_selling_products_title);
+        mBestTextView = findViewById(R.id.best_products_title);
 
         mNewestRecyclerView.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL,false));
         mTopSellingRecyclerView.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL,false));
@@ -63,6 +70,29 @@ public class MainActivity extends AppCompatActivity {
         actionbar.setDisplayHomeAsUpEnabled(true);
         actionbar.setHomeAsUpIndicator(R.drawable.ic_nav_drawer);
 
+        mNewestTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = ProductsListActivity.newIntent(MainActivity.this,null,1);
+                startActivity(intent);
+            }
+        });
+
+        mTopSellingTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = ProductsListActivity.newIntent(MainActivity.this,null,2);
+                startActivity(intent);
+            }
+        });
+
+        mBestTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = ProductsListActivity.newIntent(MainActivity.this,null,3);
+                startActivity(intent);
+            }
+        });
 
 //        new ProductTask().execute();
 
@@ -70,14 +100,14 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<List<Product>> call, Response<List<Product>> response) {
                 if(response.isSuccessful()){
-                    List<Product> products = response.body();
+                    List<Product> newestProducts = response.body();
 
-                    Collections.sort(products, new Comparator<Product>(){
-                        public int compare(Product a, Product b){
-                            return a.getCreatedDate().compareTo(b.getCreatedDate());
-                        }
-                    });
-                    mProductAdapter  = new ProductAdapter(products);
+//                    Collections.sort(products, new Comparator<Product>(){
+//                        public int compare(Product a, Product b){
+//                            return a.getCreatedDate().compareTo(b.getCreatedDate());
+//                        }
+//                    });
+                    mProductAdapter  = new ProductAdapter(newestProducts);
                     mNewestRecyclerView.setAdapter(mProductAdapter);
                     mNewestRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
                         @Override
@@ -90,31 +120,74 @@ public class MainActivity extends AppCompatActivity {
                     });
 
 
-                    Collections.sort(products, new Comparator<Product>(){
-                        public int compare(Product a, Product b){
-                            return ((Integer)a.getTotalSales()).compareTo((Integer) b.getTotalSales());
-                        }
-                    });
-                    mProductAdapter.setProducts(products);
-                    mTopSellingRecyclerView.setAdapter(mProductAdapter);
+//                    Collections.sort(products, new Comparator<Product>(){
+//                        public int compare(Product a, Product b){
+//                            return ((Integer)a.getTotalSales()).compareTo((Integer) b.getTotalSales());
+//                        }
+//                    });
+//                    mProductAdapter.setProducts(products);
+//                    mTopSellingRecyclerView.setAdapter(mProductAdapter);
+//
+//
+//                    Collections.sort(products, new Comparator<Product>(){
+//                        public int compare(Product a, Product b){
+//                            return a.getAverageRating().compareTo(b.getAverageRating());
+//                        }
+//                    });
+//                    mProductAdapter.setProducts(products);
+//                    mBestRecyclerView.setAdapter(mProductAdapter);
 
 
-                    Collections.sort(products, new Comparator<Product>(){
-                        public int compare(Product a, Product b){
-                            return a.getAverageRating().compareTo(b.getAverageRating());
-                        }
-                    });
-                    mProductAdapter.setProducts(products);
-                    mBestRecyclerView.setAdapter(mProductAdapter);
-
-
-                    Log.d("hhhhhhhhhhh","response");
                 }
             }
 
             @Override
             public void onFailure(Call<List<Product>> call, Throwable t) {
-                Log.d("hhhhhhhhh","fail");
+
+            }
+        });
+
+        RetrofitInstance.getInstance().create(Api.class).getProducts("popularity").enqueue(new Callback<List<Product>>() {
+            @Override
+            public void onResponse(Call<List<Product>> call, Response<List<Product>> response) {
+                if(response.isSuccessful()){
+                    List<Product> topSellingProducts = response.body();
+//                    Collections.sort(products, new Comparator<Product>(){
+//                        public int compare(Product a, Product b){
+//                            return ((Integer)a.getTotalSales()).compareTo((Integer) b.getTotalSales());
+//                        }
+//                    });
+                    mProductAdapter  = new ProductAdapter(topSellingProducts);
+                    mTopSellingRecyclerView.setAdapter(mProductAdapter);
+
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<Product>> call, Throwable t) {
+
+            }
+        });
+
+        RetrofitInstance.getInstance().create(Api.class).getProducts("rating").enqueue(new Callback<List<Product>>() {
+            @Override
+            public void onResponse(Call<List<Product>> call, Response<List<Product>> response) {
+                if(response.isSuccessful()){
+                    List<Product> bestProducts = response.body();
+//                    Collections.sort(products, new Comparator<Product>(){
+//                        public int compare(Product a, Product b){
+//                            return ((Integer)a.getTotalSales()).compareTo((Integer) b.getTotalSales());
+//                        }
+//                    });
+                    mProductAdapter  = new ProductAdapter(bestProducts);
+                    mBestRecyclerView.setAdapter(mProductAdapter);
+
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<Product>> call, Throwable t) {
+
             }
         });
 
@@ -128,10 +201,19 @@ public class MainActivity extends AppCompatActivity {
                         return true;
 
                     case R.id.nav_newest_products :
+                        Intent intent1 = ProductsListActivity.newIntent(MainActivity.this,null,1);
+                        startActivity(intent1);
+                        return true;
 
                     case R.id.nav_top_selling_products :
+                        Intent intent2 = ProductsListActivity.newIntent(MainActivity.this,null,2);
+                        startActivity(intent2);
+                        return true;
 
                     case R.id.nav_best_products :
+                        Intent intent3 = ProductsListActivity.newIntent(MainActivity.this,null,3);
+                        startActivity(intent3);
+                        return true;
                 }
                 return false;
             }
@@ -151,34 +233,6 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-//    private class ProductTask extends AsyncTask<Void,Void,List<Product>>{
-//
-//        @Override
-//        protected List<Product> doInBackground(Void... voids) {
-//            Retrofit retrofit = RetrofitInstance.getInstance();
-//            Api api = retrofit.create(Api.class);
-//            Call<List<Product>> productCall = api.getProducts();
-//            Response<List<Product>> productResponse;
-//            List<Product> products = null;
-//            try {
-//                productResponse = productCall.execute();
-//                if (productResponse.isSuccessful()){
-//                    products = productResponse.body();
-//                }
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//            }
-//
-//            return products;
-//        }
-//
-//        @Override
-//        protected void onPostExecute(List<Product> products) {
-//            super.onPostExecute(products);
-//            mProductAdapter  = new ProductAdapter(products);
-//            mNewestRecyclerView.setAdapter(mProductAdapter);
-//        }
-//    }
 
     private class ProductHolder extends RecyclerView.ViewHolder {
 
@@ -195,6 +249,8 @@ public class MainActivity extends AppCompatActivity {
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    Intent intent = ProductDetailsActivity.newIntent(MainActivity.this,mProduct.getId());
+                    startActivity(intent);
                 }
             });
         }

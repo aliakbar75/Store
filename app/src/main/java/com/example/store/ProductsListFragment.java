@@ -1,6 +1,7 @@
 package com.example.store;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -36,15 +37,18 @@ import retrofit2.Response;
 public class ProductsListFragment extends Fragment {
 
     private static final String ARG_PARENT_ID = "parent_id";
+    private static final String ARG_LIST_TYPE = "list_type";
     private RecyclerView mRecyclerView;
     private ProductAdapter mProductAdapter;
     private Long mCategoryId;
     private Toolbar mToolbar;
+    private int mListType;
 
-    public static ProductsListFragment newInstance(Long categoryId) {
+    public static ProductsListFragment newInstance(Long categoryId, int listType) {
 
         Bundle args = new Bundle();
         args.putLong(ARG_PARENT_ID,categoryId);
+        args.putInt(ARG_LIST_TYPE,listType);
         ProductsListFragment fragment = new ProductsListFragment();
         fragment.setArguments(args);
         return fragment;
@@ -59,6 +63,7 @@ public class ProductsListFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mCategoryId = getArguments().getLong(ARG_PARENT_ID);
+        mListType = getArguments().getInt(ARG_LIST_TYPE);
     }
 
     @Override
@@ -68,17 +73,91 @@ public class ProductsListFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_products_list, container, false);
         mRecyclerView = view.findViewById(R.id.products_recycler_view);
         mToolbar = view.findViewById(R.id.toolbar);
-
         ((ProductsListActivity)getActivity()).setSupportActionBar(mToolbar);
+
+        switch (mListType){
+            case 1:
+                ((ProductsListActivity)getActivity()).getSupportActionBar().setTitle("جدیدترین ها");
+            case 2:
+                ((ProductsListActivity)getActivity()).getSupportActionBar().setTitle("پرفروش ترین ها");
+            case 3:
+                ((ProductsListActivity)getActivity()).getSupportActionBar().setTitle("بهترین ها");
+
+        }
+
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
-        RetrofitInstance.getInstance().create(Api.class).getProducts().enqueue(new Callback<List<Product>>() {
-            @Override
-            public void onResponse(Call<List<Product>> call, Response<List<Product>> response) {
-                if(response.isSuccessful()){
-                    List<Product> products = response.body();
-                    List<Product> categoryProducts = new ArrayList<>();
-                    if (mCategoryId != null){
+        if (mCategoryId == 0){
+            switch (mListType){
+                case 1:
+                    Log.d("hhhhhhhhh","called");
+                    RetrofitInstance.getInstance().create(Api.class).getProducts().enqueue(new Callback<List<Product>>() {
+                        @Override
+                        public void onResponse(Call<List<Product>> call, Response<List<Product>> response) {
+                            if(response.isSuccessful()){
+                                List<Product> products = response.body();
+
+                                mProductAdapter  = new ProductAdapter(products);
+                                mRecyclerView.setAdapter(mProductAdapter);
+
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<List<Product>> call, Throwable t) {
+
+                        }
+                    });
+
+                case 2:
+
+                    RetrofitInstance.getInstance().create(Api.class).getProducts("popularity").enqueue(new Callback<List<Product>>() {
+                        @Override
+                        public void onResponse(Call<List<Product>> call, Response<List<Product>> response) {
+                            if(response.isSuccessful()){
+                                List<Product> products = response.body();
+
+                                mProductAdapter  = new ProductAdapter(products);
+                                mRecyclerView.setAdapter(mProductAdapter);
+
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<List<Product>> call, Throwable t) {
+
+                        }
+                    });
+
+                case 3:
+
+                    RetrofitInstance.getInstance().create(Api.class).getProducts("rating").enqueue(new Callback<List<Product>>() {
+                        @Override
+                        public void onResponse(Call<List<Product>> call, Response<List<Product>> response) {
+                            if(response.isSuccessful()){
+                                List<Product> products = response.body();
+
+                                mProductAdapter  = new ProductAdapter(products);
+                                mRecyclerView.setAdapter(mProductAdapter);
+
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<List<Product>> call, Throwable t) {
+
+                        }
+                    });
+            }
+
+        }else {
+            RetrofitInstance.getInstance().create(Api.class).getProducts().enqueue(new Callback<List<Product>>() {
+                @Override
+                public void onResponse(Call<List<Product>> call, Response<List<Product>> response) {
+                    if(response.isSuccessful()){
+                        List<Product> products = response.body();
+                        List<Product> categoryProducts = new ArrayList<>();
+
                         for (int i=0; i<products.size(); i++ ){
                             if (products.get(i).getProductCategories().size()>1){
                                 if (products.get(i).getProductCategories().get(0).getId() == mCategoryId ||
@@ -89,48 +168,20 @@ public class ProductsListFragment extends Fragment {
                             }
 
                         }
+
                         mProductAdapter  = new ProductAdapter(categoryProducts);
                         mRecyclerView.setAdapter(mProductAdapter);
 
-                    }else {
-                        mProductAdapter  = new ProductAdapter(products);
-                        mRecyclerView.setAdapter(mProductAdapter);
                     }
-
-//                    Collections.sort(products, new Comparator<Product>(){
-//                        public int compare(Product a, Product b){
-//                            return a.getCreatedDate().compareTo(b.getCreatedDate());
-//                        }
-//                    });
-
-
-
-//                    Collections.sort(products, new Comparator<Product>(){
-//                        public int compare(Product a, Product b){
-//                            return ((Integer)a.getTotalSales()).compareTo((Integer) b.getTotalSales());
-//                        }
-//                    });
-//                    mProductAdapter.setProducts(products);
-//                    mTopSellingRecyclerView.setAdapter(mProductAdapter);
-//
-//
-//                    Collections.sort(products, new Comparator<Product>(){
-//                        public int compare(Product a, Product b){
-//                            return a.getAverageRating().compareTo(b.getAverageRating());
-//                        }
-//                    });
-//                    mProductAdapter.setProducts(products);
-//                    mBestRecyclerView.setAdapter(mProductAdapter);
-
-
                 }
-            }
 
-            @Override
-            public void onFailure(Call<List<Product>> call, Throwable t) {
-                Log.d("hhhhhhhhh","fail");
-            }
-        });
+                @Override
+                public void onFailure(Call<List<Product>> call, Throwable t) {
+                    Log.d("hhhhhhhhh","fail");
+                }
+            });
+        }
+
 
         return view;
     }
@@ -150,6 +201,8 @@ public class ProductsListFragment extends Fragment {
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    Intent intent = ProductDetailsActivity.newIntent(getActivity(),mProduct.getId());
+                    startActivity(intent);
                 }
             });
         }
