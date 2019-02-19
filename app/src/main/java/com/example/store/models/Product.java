@@ -32,6 +32,9 @@ public class Product {
     @SerializedName("categories")
     private List<ProductCategory> mProductCategories;
 
+    @SerializedName("attributes")
+    private List<Attribute> mAttributes;
+
     public Product(Long id,
                    String name,
                    String price,
@@ -40,7 +43,8 @@ public class Product {
                    String createdDate,
                    int totalSales,
                    String averageRating,
-                   List<ProductCategory> productCategories) {
+                   List<ProductCategory> productCategories,
+                   List<Attribute> attributes) {
         mId = id;
         mName = name;
         mPrice = price;
@@ -50,6 +54,7 @@ public class Product {
         mTotalSales = totalSales;
         mAverageRating = averageRating;
         mProductCategories = productCategories;
+        mAttributes = attributes;
     }
 
     public Long getId() {
@@ -86,5 +91,9 @@ public class Product {
 
     public List<ProductCategory> getProductCategories() {
         return mProductCategories;
+    }
+
+    public List<Attribute> getAttributes() {
+        return mAttributes;
     }
 }

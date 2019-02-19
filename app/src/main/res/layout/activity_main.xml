@@ -34,47 +34,70 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:layout_margin="16dp">
 
                 <TextView
                     android:id="@+id/newest_products_title"
                     android:text="@string/newest_products"
-                    android:textSize="25sp"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
 
-                <android.support.v7.widget.RecyclerView
-                    android:id="@+id/newest_products_recycler_view"
+                <android.support.v7.widget.CardView
                     android:layout_width="match_parent"
-                    android:layout_height="200dp" />
+                    android:layout_height="wrap_content">
+
+                    <android.support.v7.widget.RecyclerView
+                        android:id="@+id/newest_products_recycler_view"
+                        android:layout_width="match_parent"
+                        android:layout_height="200dp" />
+
+                </android.support.v7.widget.CardView>
 
 
 
                 <TextView
                     android:id="@+id/top_selling_products_title"
                     android:text="@string/top_selling_products"
-                    android:textSize="25sp"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    android:layout_marginTop="12dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
 
-                <android.support.v7.widget.RecyclerView
-                    android:id="@+id/top_selling_products_recycler_view"
+                <android.support.v7.widget.CardView
                     android:layout_width="match_parent"
-                    android:layout_height="200dp" />
+                    android:layout_height="wrap_content">
 
+                    <android.support.v7.widget.RecyclerView
+                        android:id="@+id/top_selling_products_recycler_view"
+                        android:layout_width="match_parent"
+                        android:layout_height="200dp" />
 
+                </android.support.v7.widget.CardView>
 
                 <TextView
                     android:id="@+id/best_products_title"
                     android:text="@string/best_products"
-                    android:textSize="25sp"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    android:layout_marginTop="12dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
 
-                <android.support.v7.widget.RecyclerView
-                    android:id="@+id/best_products_recycler_view"
+                <android.support.v7.widget.CardView
                     android:layout_width="match_parent"
-                    android:layout_height="200dp" />
+                    android:layout_height="wrap_content">
+
+                    <android.support.v7.widget.RecyclerView
+                        android:id="@+id/best_products_recycler_view"
+                        android:layout_width="match_parent"
+                        android:layout_height="200dp" />
+
+                </android.support.v7.widget.CardView>
+
             </LinearLayout>
 
 

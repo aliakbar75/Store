@@ -43,6 +43,13 @@
             android:gravity="right"
             android:layout_margin="16dp" />
 
+        <Button
+            android:id="@+id/product_attribute"
+            android:text="مشخصات"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"/>
+
         <TextView
             android:id="@+id/product_description"
             android:layout_width="match_parent"

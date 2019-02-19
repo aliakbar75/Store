@@ -61,11 +61,13 @@ public class MainActivity extends AppCompatActivity {
         mTopSellingTextView = findViewById(R.id.top_selling_products_title);
         mBestTextView = findViewById(R.id.best_products_title);
 
+
         mNewestRecyclerView.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL,false));
         mTopSellingRecyclerView.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL,false));
         mBestRecyclerView.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL,false));
 
         setSupportActionBar(mToolbar);
+        getSupportActionBar().setTitle("فروشگاه");
         ActionBar actionbar = getSupportActionBar();
         actionbar.setDisplayHomeAsUpEnabled(true);
         actionbar.setHomeAsUpIndicator(R.drawable.ic_nav_drawer);

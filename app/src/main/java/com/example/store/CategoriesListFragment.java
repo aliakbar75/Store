@@ -16,10 +16,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.store.models.Category;
+import com.example.store.models.Product;
 import com.example.store.network.Api;
 import com.example.store.network.RetrofitInstance;
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
@@ -35,6 +37,7 @@ public class CategoriesListFragment extends Fragment {
     private static final String ARG_PARENT_ID = "parent_id";
     private RecyclerView mRecyclerView;
     private CategoryAdapter mCategoryAdapter;
+    private ProductAdapter mProductAdapter;
     private Long mParentId;
 
     public static CategoriesListFragment newInstance(Long parentId) {
@@ -55,6 +58,7 @@ public class CategoriesListFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mParentId = getArguments().getLong(ARG_PARENT_ID);
+        setRetainInstance(true);
     }
 
     @Override
@@ -65,21 +69,50 @@ public class CategoriesListFragment extends Fragment {
         mRecyclerView = view.findViewById(R.id.categories_recycler_view);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
-        RetrofitInstance.getInstance().create(Api.class).getCategories(mParentId).enqueue(new Callback<List<Category>>() {
-            @Override
-            public void onResponse(Call<List<Category>> call, Response<List<Category>> response) {
-                if (response.isSuccessful()){
-                    List<Category> categories = response.body();
-                    mCategoryAdapter  = new CategoryAdapter(categories);
-                    mRecyclerView.setAdapter(mCategoryAdapter);
+        if (mParentId == 15){
+            RetrofitInstance.getInstance().create(Api.class).getProducts().enqueue(new Callback<List<Product>>() {
+                @Override
+                public void onResponse(Call<List<Product>> call, Response<List<Product>> response) {
+                    if (response.isSuccessful()){
+                        List<Product> products = response.body();
+                        List<Product> categoryProducts = new ArrayList<>();
+
+                        for (int i=0; i<products.size(); i++ ){
+                            if (products.get(i).getProductCategories().get(0).getId() == 15){
+                                categoryProducts.add(products.get(i));
+                                Log.d("hhhhhhhhhhhh",products.get(i).getName());
+                            }
+
+                        }
+                        mProductAdapter  = new ProductAdapter(categoryProducts);
+                        mRecyclerView.setAdapter(mProductAdapter);
+                    }
                 }
-            }
 
-            @Override
-            public void onFailure(Call<List<Category>> call, Throwable t) {
+                @Override
+                public void onFailure(Call<List<Product>> call, Throwable t) {
 
-            }
-        });
+                }
+            });
+        }else {
+            RetrofitInstance.getInstance().create(Api.class).getCategories(mParentId).enqueue(new Callback<List<Category>>() {
+                @Override
+                public void onResponse(Call<List<Category>> call, Response<List<Category>> response) {
+                    if (response.isSuccessful()){
+                        List<Category> categories = response.body();
+                        mCategoryAdapter  = new CategoryAdapter(categories);
+                        mRecyclerView.setAdapter(mCategoryAdapter);
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<List<Category>> call, Throwable t) {
+
+                }
+            });
+        }
+
+
 
         return view;
     }
@@ -146,5 +179,70 @@ public class CategoriesListFragment extends Fragment {
             return mCategories.size();
         }
     }
+
+
+    private class ProductHolder extends RecyclerView.ViewHolder {
+
+        private TextView mNameTextView;
+        private ImageView mProductImageView;
+        private Product mProduct;
+
+        public ProductHolder(@NonNull View itemView) {
+            super(itemView);
+
+            mNameTextView = itemView.findViewById(R.id.product_name_text_view);
+            mProductImageView = itemView.findViewById(R.id.product_image_view);
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = ProductDetailsActivity.newIntent(getActivity(),mProduct.getId());
+                    startActivity(intent);
+                }
+            });
+        }
+
+        public void bind(Product product) {
+            mProduct = product;
+            mNameTextView.setText(product.getName());
+            if(product.getImages()!= null && product.getImages().size()>0){
+                Picasso.get().load(product.getImages().get(0).getPath()).into(mProductImageView);
+            }
+        }
+    }
+
+    private class ProductAdapter extends RecyclerView.Adapter<ProductHolder> {
+
+        private List<Product> mProducts;
+
+        public ProductAdapter(List<Product> products) {
+            mProducts = products;
+        }
+
+        public void setProducts(List<Product> products) {
+            mProducts = products;
+        }
+
+        @NonNull
+        @Override
+        public ProductHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+            LayoutInflater inflater = LayoutInflater.from(getActivity());
+            View view = inflater.inflate(R.layout.list_item_product, parent, false);
+            ProductHolder productHolder = new ProductHolder(view);
+            return productHolder;
+        }
+
+        @Override
+        public void onBindViewHolder(@NonNull ProductHolder holder, int position) {
+            Product product = mProducts.get(position);
+            holder.bind(product);
+        }
+
+        @Override
+        public int getItemCount() {
+            return mProducts.size();
+        }
+    }
+
 
 }

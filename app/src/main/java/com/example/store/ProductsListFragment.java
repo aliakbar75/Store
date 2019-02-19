@@ -74,16 +74,8 @@ public class ProductsListFragment extends Fragment {
         mRecyclerView = view.findViewById(R.id.products_recycler_view);
         mToolbar = view.findViewById(R.id.toolbar);
         ((ProductsListActivity)getActivity()).setSupportActionBar(mToolbar);
+        ((ProductsListActivity)getActivity()).getSupportActionBar().setTitle("لیست محصولات");
 
-        switch (mListType){
-            case 1:
-                ((ProductsListActivity)getActivity()).getSupportActionBar().setTitle("جدیدترین ها");
-            case 2:
-                ((ProductsListActivity)getActivity()).getSupportActionBar().setTitle("پرفروش ترین ها");
-            case 3:
-                ((ProductsListActivity)getActivity()).getSupportActionBar().setTitle("بهترین ها");
-
-        }
 
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 

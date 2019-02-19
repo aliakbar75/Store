@@ -7,13 +7,12 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
-import com.example.store.models.Image;
 import com.example.store.models.Product;
 import com.example.store.network.Api;
 import com.example.store.network.RetrofitInstance;
@@ -23,7 +22,6 @@ import java.util.List;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.http.Path;
 
 
 /**
@@ -31,11 +29,14 @@ import retrofit2.http.Path;
  */
 public class ProductDetailsFragment extends Fragment {
 
+    private static final String DIALOG_PRODUCT_ATTRIBUTES = "product_attributes";
     private ViewPager mViewPager;
     private TextView mProductName;
     private TextView mProductPrice;
     private TextView mProductDescription;
     private Toolbar mToolbar;
+
+    private Button mAttributeButton;
 
     private List<Product> mProducts;
     private Product mProduct;
@@ -75,6 +76,7 @@ public class ProductDetailsFragment extends Fragment {
         mProductPrice = view.findViewById(R.id.product_price);
         mProductDescription = view.findViewById(R.id.product_description);
         mToolbar = view.findViewById(R.id.toolbar);
+        mAttributeButton = view.findViewById(R.id.product_attribute);
 
 //        ((ProductDetailsActivity)getActivity()).setSupportActionBar(mToolbar);
 
@@ -93,11 +95,23 @@ public class ProductDetailsFragment extends Fragment {
                         public Fragment getItem(int i) {
                             String imagePath = mProduct.getImages().get(i).getPath();
                             return ProductImagesFragment.newInstance(imagePath);
+
                         }
 
                         @Override
                         public int getCount() {
                             return mProduct.getImages().size();
+                        }
+                    });
+
+
+                    mAttributeButton.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            ProductAttributesDialogFragment productAttributesDialogFragment =
+                                    ProductAttributesDialogFragment.newInstance(mProduct.getId());
+
+                            productAttributesDialogFragment.show(getFragmentManager(),DIALOG_PRODUCT_ATTRIBUTES);
                         }
                     });
 
@@ -112,6 +126,7 @@ public class ProductDetailsFragment extends Fragment {
             }
 
         });
+
 
 
 
